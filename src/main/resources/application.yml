@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: app
+  profiles:
+    active: dev
+
+server:
+  port: ${PORT:8080}
