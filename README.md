@@ -10,7 +10,7 @@
 Это веб-приложение, разработанное на платформе **Spring Boot** в рамках первого этапа обучения на Хекслете. В проекте настроена автоматическая сборка с помощью Gradle, интеграция с CI/CD через GitHub Actions и статический анализ качества кода в SonarCloud.
 
 ## Ссылки
-* **Задеплоенное приложение:** [https://app-xxxx.onrender.com/welcome](https://app-xxxx.onrender.com/welcome) *(замени на свою ссылку от Render после деплоя)*
+* **Задеплоенное приложение:** [https://java-project-99-sbfh.onrender.com](https://java-project-99-sbfh.onrender.com)
 
 ## Требования к окружению
 * **Java:** OpenJDK 21
