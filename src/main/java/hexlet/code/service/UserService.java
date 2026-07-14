@@ -40,23 +40,24 @@ public class UserService {
         return toDTO(user);
     }
 
+
     public UserDTO update(Long id, UserUpdateDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (dto.getFirstName() != null && dto.getFirstName().isPresent()) {
+        if (dto.getFirstName().isPresent()) {
             user.setFirstName(dto.getFirstName().orElse(null));
         }
 
-        if (dto.getLastName() != null && dto.getLastName().isPresent()) {
+        if (dto.getLastName().isPresent()) {
             user.setLastName(dto.getLastName().orElse(null));
         }
 
-        if (dto.getEmail() != null && dto.getEmail().isPresent()) {
+        if (dto.getEmail().isPresent()) {
             user.setEmail(dto.getEmail().orElse(null));
         }
 
-        if (dto.getPassword() != null && dto.getPassword().isPresent()) {
+        if (dto.getPassword().isPresent()) {
             String rawPassword = dto.getPassword().orElse(null);
             if (rawPassword != null) {
                 user.setPassword(passwordEncoder.encode(rawPassword));

@@ -24,20 +24,17 @@ dependencies {
     runtimeOnly("com.h2database:h2")
     runtimeOnly("org.postgresql:postgresql")
 
-    // Spring Boot 4 Стартеры
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-webmvc")     // Оставляем! Для SB 4 это правильно
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-    // Jackson для Spring Boot 4
     implementation("org.springframework.boot:spring-boot-starter-jackson")
     implementation("org.openapitools:jackson-databind-nullable:0.2.10")
     implementation("com.fasterxml.jackson.core:jackson-databind")
 
-    // Тестовые зависимости для Spring Boot 4.x
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test") // Возвращаем для работы MockMvc
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

@@ -3,7 +3,7 @@ package hexlet.code.controller;
 import tools.jackson.databind.ObjectMapper;
 
 import hexlet.code.dto.UserCreateDTO;
-import hexlet.code.dto.UserUpdateDTO; // Импортируем наш DTO обновления
+import hexlet.code.dto.UserUpdateDTO;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -69,7 +69,6 @@ public class UserControllerTest {
         dto.setEmail("not-an-email");
         dto.setPassword("12");
 
-        // Добавлен .with(csrf()), чтобы избежать 403 Forbidden при включенном Spring Security
         mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -79,28 +78,24 @@ public class UserControllerTest {
 
     @Test
     public void testPartialUpdateUser() throws Exception {
-        // Создаем и сохраняем исходного пользователя
         User user = new User();
         user.setEmail("initial@example.com");
         user.setPassword("rawPassword");
         user.setFirstName("Alex");
         userRepository.save(user);
 
-        // Используем строго типизированный UserUpdateDTO вместо Map
         UserUpdateDTO updateDto = new UserUpdateDTO();
         updateDto.setFirstName(JsonNullable.of("Alexander"));
-        // Email и Password остаются неинициализированными (JsonNullable.undefined())
 
         mockMvc.perform(put("/api/users/" + user.getId())
-                        .with(csrf()) // Добавлен csrf() для PUT-запроса
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andExpect(status().isOk());
 
-        // Проверяем, что обновилось только то, что просили
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
         assertThat(updatedUser.getFirstName()).isEqualTo("Alexander");
-        assertThat(updatedUser.getEmail()).isEqualTo("initial@example.com"); // Email не изменился
+        assertThat(updatedUser.getEmail()).isEqualTo("initial@example.com");
     }
 
     @Test
@@ -111,7 +106,7 @@ public class UserControllerTest {
         userRepository.save(user);
 
         mockMvc.perform(delete("/api/users/" + user.getId())
-                        .with(csrf())) // Добавлен csrf() для DELETE-запроса
+                        .with(csrf()))
                 .andExpect(status().isNoContent());
 
         assertThat(userRepository.findById(user.getId())).isEmpty();
