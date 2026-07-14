@@ -1,5 +1,6 @@
 package hexlet.code.controller;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import tools.jackson.databind.ObjectMapper;
 
 import hexlet.code.dto.UserCreateDTO;
@@ -44,7 +45,8 @@ public class UserControllerTest {
 
     @Test
     public void testGetUsers() throws Exception {
-        mockMvc.perform(get("/api/users"))
+        mockMvc.perform(get("/api/users")
+                        .with(jwt()))
                 .andExpect(status().isOk());
     }
 
@@ -88,6 +90,7 @@ public class UserControllerTest {
         updateDto.setFirstName(JsonNullable.of("Alexander"));
 
         mockMvc.perform(put("/api/users/" + user.getId())
+                        .with(jwt().jwt(builder -> builder.subject(user.getEmail())))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
@@ -106,6 +109,7 @@ public class UserControllerTest {
         userRepository.save(user);
 
         mockMvc.perform(delete("/api/users/" + user.getId())
+                        .with(jwt().jwt(builder -> builder.subject(user.getEmail())))
                         .with(csrf()))
                 .andExpect(status().isNoContent());
 

@@ -7,6 +7,7 @@ import hexlet.code.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -34,12 +35,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("authentication.name == @userService.getById(#id).email")
     public UserDTO update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto) {
         return userService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("authentication.name == @userService.getById(#id).email")
     public void destroy(@PathVariable Long id) {
         userService.delete(id);
     }
