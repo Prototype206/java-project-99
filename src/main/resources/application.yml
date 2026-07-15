@@ -3,6 +3,9 @@ spring:
     name: app
   profiles:
     active: dev
+  autoconfigure:
+    exclude:
+      - io.sentry.spring.boot.jakarta.SentryAutoConfiguration
 
 server:
   port: ${PORT:8080}
