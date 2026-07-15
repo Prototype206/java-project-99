@@ -1,17 +1,11 @@
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
-
-sentry:
-  dsn: ${SENTRY_DSN}
-  send-default-pii: true
-  traces-sample-rate: 1.0
-  logging:
-    minimum-event-level: error
-    minimum-breadcrumb-level: info
