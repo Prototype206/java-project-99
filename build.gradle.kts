@@ -38,7 +38,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
-    implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.10.0")
+    implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.4.0")
 }
 
 tasks.withType<Test> {
