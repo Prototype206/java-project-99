@@ -17,11 +17,24 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import java.util.Set;
+import java.util.HashSet;
+
 @Entity
 @Table(name = "tasks")
 @Getter
 @Setter
 public class Task {
+
+    @ManyToMany
+    @JoinTable(
+        name = "task_labels",
+        joinColumns = @JoinColumn(name = "task_id"),
+        inverseJoinColumns = @JoinColumn(name = "label_id")
+    )
+    private Set<Label> labels = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

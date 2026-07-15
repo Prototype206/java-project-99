@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import hexlet.code.dto.TaskParamsDTO;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -18,8 +19,8 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping
-    public List<TaskDTO> index() {
-        return taskService.getAll();
+    public List<TaskDTO> index(TaskParamsDTO params) {
+        return taskService.getAll(params);
     }
 
     @GetMapping("/{id}")

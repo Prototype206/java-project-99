@@ -5,15 +5,24 @@ import hexlet.code.dto.TaskDTO;
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.exception.ResourceNotFoundException;
 import hexlet.code.model.Task;
+import hexlet.code.model.Label;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.TaskRepository;
+import hexlet.code.repository.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import hexlet.code.dto.TaskParamsDTO;
+import hexlet.code.specification.TaskSpecification;
 
 @Service
 public class TaskService {
+
+    @Autowired
+    private TaskSpecification taskSpecification;
 
     @Autowired
     private TaskRepository taskRepository;
@@ -24,8 +33,14 @@ public class TaskService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<TaskDTO> getAll() {
-        return taskRepository.findAll().stream().map(this::toDTO).toList();
+    @Autowired
+    private LabelRepository labelRepository;
+
+    public List<TaskDTO> getAll(TaskParamsDTO params) {
+        var spec = taskSpecification.build(params);
+        return taskRepository.findAll(spec).stream()
+                .map(this::toDTO)
+                .toList();
     }
 
     public TaskDTO getById(Long id) {
@@ -48,6 +63,11 @@ public class TaskService {
             var assignee = userRepository.findById(dto.getAssigneeId())
                     .orElseThrow(() -> new ResourceNotFoundException("Assignee not found"));
             task.setAssignee(assignee);
+        }
+
+        if (dto.getTaskLabelIds() != null) {
+            var labels = new HashSet<>(labelRepository.findAllById(dto.getTaskLabelIds()));
+            task.setLabels(labels);
         }
 
         taskRepository.save(task);
@@ -82,6 +102,15 @@ public class TaskService {
                 task.setAssignee(null);
             }
         }
+        if (dto.getTaskLabelIds().isPresent()) {
+            var labelIds = dto.getTaskLabelIds().orElse(null);
+            if (labelIds != null) {
+                var labels = new HashSet<>(labelRepository.findAllById(labelIds));
+                task.setLabels(labels);
+            } else {
+                task.getLabels().clear();
+            }
+        }
 
         taskRepository.save(task);
         return toDTO(task);
@@ -100,6 +129,16 @@ public class TaskService {
         dto.setStatusSlug(task.getTaskStatus().getSlug());
         dto.setAssigneeId(task.getAssignee() != null ? task.getAssignee().getId() : null);
         dto.setCreatedAt(task.getCreatedAt());
+
+        if (task.getLabels() != null) {
+            var labelIds = task.getLabels().stream()
+                    .map(Label::getId)
+                    .collect(Collectors.toSet());
+            dto.setTaskLabelIds(labelIds);
+        } else {
+            dto.setTaskLabelIds(new HashSet<>());
+        }
+
         return dto;
     }
 }

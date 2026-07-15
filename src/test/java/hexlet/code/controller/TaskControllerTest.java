@@ -9,6 +9,7 @@ import hexlet.code.model.User;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
+import hexlet.code.repository.LabelRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,9 @@ public class TaskControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LabelRepository labelRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -129,5 +133,63 @@ public class TaskControllerTest {
                 .andExpect(status().isNoContent());
 
         assertThat(taskRepository.findById(task.getId())).isEmpty();
+    }
+
+    @Test
+    public void testGetTasksWithFilters() throws Exception {
+        var label = new hexlet.code.model.Label();
+        label.setName("urgent");
+        labelRepository.save(label);
+
+        Task task1 = new Task();
+        task1.setName("Fix security vulnerability");
+        task1.setTaskStatus(testStatus);
+        task1.setAssignee(testUser);
+        task1.getLabels().add(label);
+        taskRepository.save(task1);
+
+        var anotherStatus = taskStatusRepository.findBySlug("draft")
+                .orElseThrow(() -> new AssertionError("Default status 'draft' not found"));
+
+        Task task2 = new Task();
+        task2.setName("Write documentation");
+        task2.setTaskStatus(anotherStatus);
+        taskRepository.save(task2);
+
+        mockMvc.perform(get("/api/tasks?titleCont=security")
+                        .with(jwt()))
+                .andExpect(status().isOk())
+                .andExpect(result -> {
+                    String body = result.getResponse().getContentAsString();
+                    assertThat(body).contains("Fix security vulnerability");
+                    assertThat(body).doesNotContain("Write documentation");
+                });
+
+        mockMvc.perform(get("/api/tasks?assigneeId=" + testUser.getId())
+                        .with(jwt()))
+                .andExpect(status().isOk())
+                .andExpect(result -> {
+                    String body = result.getResponse().getContentAsString();
+                    assertThat(body).contains("Fix security vulnerability");
+                    assertThat(body).doesNotContain("Write documentation");
+                });
+
+        mockMvc.perform(get("/api/tasks?status=draft")
+                        .with(jwt()))
+                .andExpect(status().isOk())
+                .andExpect(result -> {
+                    String body = result.getResponse().getContentAsString();
+                    assertThat(body).contains("Write documentation");
+                    assertThat(body).doesNotContain("Fix security vulnerability");
+                });
+
+        mockMvc.perform(get("/api/tasks?labelId=" + label.getId())
+                        .with(jwt()))
+                .andExpect(status().isOk())
+                .andExpect(result -> {
+                    String body = result.getResponse().getContentAsString();
+                    assertThat(body).contains("Fix security vulnerability");
+                    assertThat(body).doesNotContain("Write documentation");
+                });
     }
 }

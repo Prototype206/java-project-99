@@ -25,4 +25,7 @@ public class TaskCreateDTO {
 
     @JsonProperty("assignee_id")
     private Long assigneeId;
+
+    @JsonProperty("taskLabelIds")
+    private java.util.Set<Long> taskLabelIds;
 }

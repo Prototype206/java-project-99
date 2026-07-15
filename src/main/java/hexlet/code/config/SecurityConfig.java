@@ -91,6 +91,9 @@ public class SecurityConfig {
                 .requestMatchers("/index.html").permitAll()
                 .requestMatchers("/assets/**").permitAll()
                 .requestMatchers("/favicon.ico").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/swagger-ui.html").permitAll()
 
                 .requestMatchers("/api/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()

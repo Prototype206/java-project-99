@@ -2,13 +2,17 @@ package hexlet.code;
 
 import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.TaskStatusCreateDTO;
+import hexlet.code.dto.LabelCreateDTO;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.TaskStatusRepository;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.service.UserService;
 import hexlet.code.service.TaskStatusService;
+import hexlet.code.service.LabelService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.util.Map;
+import java.util.List;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -17,15 +21,21 @@ public class DataInitializer implements CommandLineRunner {
     private final UserService userService;
     private final TaskStatusRepository taskStatusRepository;
     private final TaskStatusService taskStatusService;
+    private final LabelRepository labelRepository;
+    private final LabelService labelService;
 
     public DataInitializer(UserRepository userRepository,
                            UserService userService,
                            TaskStatusRepository taskStatusRepository,
-                           TaskStatusService taskStatusService) {
+                           TaskStatusService taskStatusService,
+                           LabelRepository labelRepository,
+                           LabelService labelService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.taskStatusRepository = taskStatusRepository;
         this.taskStatusService = taskStatusService;
+        this.labelRepository = labelRepository;
+        this.labelService = labelService;
     }
 
     @Override
@@ -53,6 +63,15 @@ public class DataInitializer implements CommandLineRunner {
                 statusDto.setName(entry.getKey());
                 statusDto.setSlug(entry.getValue());
                 taskStatusService.create(statusDto);
+            }
+        }
+
+        List<String> defaultLabels = List.of("feature", "bug");
+        for (String labelName : defaultLabels) {
+            if (labelRepository.findByName(labelName).isEmpty()) {
+                LabelCreateDTO labelDto = new LabelCreateDTO();
+                labelDto.setName(labelName);
+                labelService.create(labelDto);
             }
         }
     }

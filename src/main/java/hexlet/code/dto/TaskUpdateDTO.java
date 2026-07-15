@@ -22,4 +22,7 @@ public class TaskUpdateDTO {
 
     @JsonProperty("assignee_id")
     private JsonNullable<Long> assigneeId = JsonNullable.undefined();
+
+    @JsonProperty("taskLabelIds")
+    private JsonNullable<java.util.Set<Long>> taskLabelIds = JsonNullable.undefined();
 }

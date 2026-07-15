@@ -26,4 +26,7 @@ public class TaskDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;
+
+    @JsonProperty("taskLabelIds")
+    private java.util.Set<Long> taskLabelIds;
 }
