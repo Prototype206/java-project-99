@@ -29,8 +29,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-
-
     implementation("org.springframework.boot:spring-boot-starter-jackson")
     implementation("org.openapitools:jackson-databind-nullable:0.2.10")
     implementation("com.fasterxml.jackson.core:jackson-databind")
@@ -41,6 +39,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+    implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.10.0")
 }
 
 tasks.withType<Test> {
