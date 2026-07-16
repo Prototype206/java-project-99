@@ -4,7 +4,7 @@ import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserDTO;
 import hexlet.code.dto.UserUpdateDTO;
 import hexlet.code.exception.ResourceNotFoundException;
-import hexlet.code.mapper.UserMapper; // Импортируем маппер
+import hexlet.code.mapper.UserMapper;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +18,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserMapper userMapper; // Внедряем через конструктор
+    private final UserMapper userMapper;
 
     @Override
     public List<UserDTO> getAll() {
         return userRepository.findAll().stream()
-                .map(userMapper::map) // Используем маппер
+                .map(userMapper::map)
                 .toList();
     }
 
@@ -47,10 +47,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Автоматическое обновление простых полей через MapStruct
         userMapper.update(dto, user);
 
-        // Сложносоставную логику (хеширование пароля) делаем вручную, если поле передано
         if (dto.getPassword() != null && dto.getPassword().isPresent()) {
             user.setPassword(passwordEncoder.encode(dto.getPassword().orElse(null)));
         }
