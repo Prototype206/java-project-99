@@ -5,6 +5,8 @@ import hexlet.code.dto.LabelCreateDTO;
 import hexlet.code.dto.LabelUpdateDTO;
 import hexlet.code.model.Label;
 import hexlet.code.repository.LabelRepository;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Transactional
 public class LabelControllerTest {
 
     @Autowired
@@ -35,6 +36,11 @@ public class LabelControllerTest {
 
     @Autowired
     private LabelRepository labelRepository;
+
+    @AfterEach
+    public void tearDown() {
+        labelRepository.deleteAll();
+    }
 
     @Autowired
     private ObjectMapper objectMapper;

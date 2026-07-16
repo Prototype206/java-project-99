@@ -17,8 +17,7 @@
 * **Сборщик:** Gradle 8.7+
 
 ## Локальный запуск и сборка
-
 1. Клонируйте репозиторий:
    ```bash
-   git clone [https://github.com/Prototype206/java-project-99.git](https://github.com/Prototype206/java-project-99.git)
+   git clone https://github.com/Prototype206/java-project-99.git
    cd java-project-99

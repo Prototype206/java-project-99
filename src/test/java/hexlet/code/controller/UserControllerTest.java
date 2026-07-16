@@ -7,6 +7,8 @@ import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserUpdateDTO;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Transactional
 @WithMockUser(username = "test_user")
 public class UserControllerTest {
 
@@ -39,6 +40,11 @@ public class UserControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @AfterEach
+    public void tearDown() {
+        userRepository.deleteAll();
+    }
 
     @Autowired
     private ObjectMapper objectMapper;

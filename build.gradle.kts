@@ -39,6 +39,9 @@ dependencies {
     
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
     implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.4.0")
+    
+    implementation("org.mapstruct:mapstruct:1.6.0")
+	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.0")
 }
 
 tasks.withType<Test> {

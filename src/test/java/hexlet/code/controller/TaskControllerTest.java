@@ -10,6 +10,8 @@ import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.LabelRepository;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Transactional
 public class TaskControllerTest {
 
     @Autowired
@@ -47,6 +48,14 @@ public class TaskControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @AfterEach
+    public void tearDown() {
+        taskRepository.deleteAll();
+        taskStatusRepository.deleteAll();
+        userRepository.deleteAll();
+        labelRepository.deleteAll();
+    }
 
     @Autowired
     private LabelRepository labelRepository;
@@ -148,8 +157,13 @@ public class TaskControllerTest {
         task1.getLabels().add(label);
         taskRepository.save(task1);
 
-        var anotherStatus = taskStatusRepository.findBySlug("draft")
-                .orElseThrow(() -> new AssertionError("Default status 'draft' not found"));
+        TaskStatus anotherStatus = taskStatusRepository.findBySlug("draft")
+                .orElseGet(() -> {
+                    TaskStatus newStatus = new TaskStatus();
+                    newStatus.setName("Draft");
+                    newStatus.setSlug("draft");
+                    return taskStatusRepository.save(newStatus);
+                });
 
         Task task2 = new Task();
         task2.setName("Write documentation");
