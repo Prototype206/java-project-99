@@ -10,7 +10,11 @@ import jakarta.persistence.criteria.JoinType;
 public class TaskSpecification {
 
     public Specification<Task> build(TaskParamsDTO params) {
-        return withTitleCont(params.getTitleCont())
+        if (params == null) {
+            return (root, query, cb) -> cb.conjunction();
+        }
+
+        return Specification.where(withTitleCont(params.getTitleCont()))
                 .and(withAssigneeId(params.getAssigneeId()))
                 .and(withStatus(params.getStatus()))
                 .and(withLabelId(params.getLabelId()));
@@ -47,6 +51,9 @@ public class TaskSpecification {
         return (root, query, cb) -> {
             if (labelId == null) {
                 return cb.conjunction();
+            }
+            if (query != null) {
+                query.distinct(true);
             }
             return cb.equal(root.join("labels", JoinType.INNER).get("id"), labelId);
         };
