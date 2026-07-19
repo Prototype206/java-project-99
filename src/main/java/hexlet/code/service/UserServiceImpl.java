@@ -43,7 +43,9 @@ public class UserServiceImpl implements UserService {
     public UserDTO create(UserCreateDTO dto) {
         User user = userMapper.map(dto);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        userRepository.save(user);
+
+        userRepository.saveAndFlush(user);
+
         return userMapper.map(user);
     }
 
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(dto.getPassword().get()));
         }
 
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
         return userMapper.map(user);
     }
 
