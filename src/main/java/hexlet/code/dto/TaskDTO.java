@@ -4,29 +4,21 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
 public class TaskDTO {
     private Long id;
-    private Integer index;
-
-    @JsonProperty("title")
-    private String name;
-
-    @JsonProperty("content")
-    private String description;
-
-    @JsonProperty("status")
-    private String statusSlug;
-
-    @JsonProperty("assignee_id")
+    private String title; // мапится из name
+    private String content; // мапится из description
+    private String status; // slug статуса
     private Long assigneeId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDateTime createdAt;
-
     @JsonProperty("taskLabelIds")
-    private java.util.Set<Long> taskLabelIds;
+    private Set<Long> taskLabelIds; // Коллекция ID, а не объектов!
+
+    private Integer index;
+    private LocalDate createdAt;
 }

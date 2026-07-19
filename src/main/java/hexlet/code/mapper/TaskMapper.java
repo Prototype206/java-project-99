@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class TaskMapper {
-
-    @Mapping(target = "statusSlug", source = "taskStatus.slug")
+    @Mapping(target = "title", source = "name")
+    @Mapping(target = "status", source = "taskStatus.slug")
     @Mapping(target = "assigneeId", source = "assignee.id")
-    @Mapping(target = "taskLabelIds", source = "labels")
+    @Mapping(target = "taskLabelIds", expression = "java(mapLabelsToIds(model.getLabels()))")
     public abstract TaskDTO map(Task model);
 
     @Mapping(target = "taskStatus", ignore = true)

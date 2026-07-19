@@ -12,6 +12,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -37,5 +39,5 @@ public class TaskStatus {
     private String slug;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 }

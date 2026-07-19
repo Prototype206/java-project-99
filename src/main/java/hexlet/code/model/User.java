@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -41,8 +43,8 @@ public class User {
     private String password;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private LocalDate updatedAt;
 }

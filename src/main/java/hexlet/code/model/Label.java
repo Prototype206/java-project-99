@@ -12,6 +12,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -32,5 +34,5 @@ public class Label {
     private String name;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 }

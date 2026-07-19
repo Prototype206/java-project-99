@@ -15,12 +15,15 @@ import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinTable;
 import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.util.HashSet;
 
 @Entity
@@ -63,5 +66,5 @@ public class Task {
     private User assignee;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 }
