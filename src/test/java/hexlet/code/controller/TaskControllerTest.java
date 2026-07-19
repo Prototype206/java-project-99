@@ -11,7 +11,6 @@ import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.LabelRepository;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,14 +47,6 @@ public class TaskControllerTest {
     @Autowired
     private UserRepository userRepository;
 
-    @AfterEach
-    public void tearDown() {
-        taskRepository.deleteAll();
-        taskStatusRepository.deleteAll();
-        userRepository.deleteAll();
-        labelRepository.deleteAll();
-    }
-
     @Autowired
     private LabelRepository labelRepository;
 
@@ -68,6 +58,12 @@ public class TaskControllerTest {
 
     @BeforeEach
     public void setUp() {
+        taskRepository.deleteAll();
+
+        taskStatusRepository.deleteAll();
+        userRepository.deleteAll();
+        labelRepository.deleteAll();
+
         testUser = new User();
         testUser.setEmail("developer@example.com");
         testUser.setPassword("password");

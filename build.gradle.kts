@@ -4,6 +4,8 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.sonarqube") version "7.3.1.8318"
 	id("io.freefair.lombok") version "8.6"
+	jacoco
+	checkstyle
 }
 
 group = "hexlet.code"
@@ -14,6 +16,15 @@ java {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
+
+checkstyle {
+    toolVersion = "10.21.2"
+}
+
+val jacksonNullableVersion by extra("0.2.10")
+val springdocVersion by extra("2.5.0")
+val sentryVersion by extra("8.4.0")
+val mapstructVersion by extra("1.6.0")
 
 repositories {
 	mavenCentral()
@@ -29,7 +40,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-jackson")
-    implementation("org.openapitools:jackson-databind-nullable:0.2.10")
+    
+    implementation("org.openapitools:jackson-databind-nullable:$jacksonNullableVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -37,20 +49,30 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
-    implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.4.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
+    implementation("io.sentry:sentry-spring-boot-starter-jakarta:$sentryVersion")
     
-    implementation("org.mapstruct:mapstruct:1.6.0")
-	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.0")
+    implementation("org.mapstruct:mapstruct:$mapstructVersion")
+	annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.withType<Test>())
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 sonar {
   properties {
     property("sonar.projectKey", "Prototype206_java-project-99")
     property("sonar.organization", "prototypes-organization")
+    property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
   }
 }
