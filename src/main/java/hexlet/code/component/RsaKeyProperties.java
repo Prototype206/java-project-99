@@ -1,6 +1,5 @@
 package hexlet.code.component;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,7 @@ public class RsaKeyProperties {
     private RSAPublicKey publicKey;
     private RSAPrivateKey privateKey;
 
-    @PostConstruct
-    public void init() {
+    public RsaKeyProperties() {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);
@@ -32,8 +30,8 @@ public class RsaKeyProperties {
             this.publicKey = (RSAPublicKey) keyPair.getPublic();
             this.privateKey = (RSAPrivateKey) keyPair.getPrivate();
         } catch (NoSuchAlgorithmException e) {
-            log.error("Failed to initialize RSA key pair generator: {}", e.getMessage(), e);
-            throw new IllegalStateException("RSA algorithm is not available in JRE", e);
+            log.error("Failed to initialize RSA KeyPairGenerator: algorithm not found", e);
+            throw new IllegalStateException("RSA algorithm is not available in the environment", e);
         }
     }
 }

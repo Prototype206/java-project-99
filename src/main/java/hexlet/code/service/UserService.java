@@ -6,9 +6,9 @@ import hexlet.code.dto.UserUpdateDTO;
 import java.util.List;
 
 public interface UserService {
+    List<UserDTO> getAll();
+    UserDTO getById(Long id);
     UserDTO create(UserCreateDTO dto);
     UserDTO update(Long id, UserUpdateDTO dto);
-    UserDTO getById(Long id);
-    List<UserDTO> getAll();
     void delete(Long id);
 }
