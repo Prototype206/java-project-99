@@ -1,7 +1,7 @@
 .PHONY: build
 
 setup:
-	./gradlew shadowJar
+	./gradlew clean build -x test
 
 clean:
 	./gradlew clean
