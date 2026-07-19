@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+@Service("userService")
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -52,10 +52,13 @@ public class UserServiceImpl implements UserService {
     public UserDTO update(Long id, UserUpdateDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found"));
+
         userMapper.update(dto, user);
+
         if (dto.getPassword() != null && dto.getPassword().isPresent()) {
             user.setPassword(passwordEncoder.encode(dto.getPassword().get()));
         }
+
         userRepository.save(user);
         return userMapper.map(user);
     }
