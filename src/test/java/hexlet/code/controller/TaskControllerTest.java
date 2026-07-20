@@ -91,16 +91,23 @@ public class TaskControllerTest {
         dto.setStatusSlug(testStatus.getSlug());
         dto.setAssigneeId(testUser.getId());
 
-        mockMvc.perform(post("/api/tasks")
+        var response = mockMvc.perform(post("/api/tasks")
                         .with(jwt())
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertThat(response).contains("content");
+        assertThat(response).contains("Testing the Task Controller layer");
 
         assertThat(taskRepository.findAll()).hasSize(1);
         Task createdTask = taskRepository.findAll().get(0);
         assertThat(createdTask.getName()).isEqualTo("Write integration tests");
+        assertThat(createdTask.getDescription()).isEqualTo("Testing the Task Controller layer");
         assertThat(createdTask.getAssignee().getId()).isEqualTo(testUser.getId());
     }
 

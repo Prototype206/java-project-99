@@ -1,6 +1,5 @@
 package hexlet.code.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,13 +10,21 @@ import java.util.Set;
 @Setter
 public class TaskDTO {
     private Long id;
-    private String title; // мапится из name
-    private String content; // мапится из description
-    private String status; // slug статуса
+
+    @JsonProperty("title")
+    private String name;
+
+    @JsonProperty("content")
+    private String description;
+
+    @JsonProperty("status")
+    private String statusSlug;
+
+    @JsonProperty("assignee_id")
     private Long assigneeId;
 
     @JsonProperty("taskLabelIds")
-    private Set<Long> taskLabelIds; // Коллекция ID, а не объектов!
+    private Set<Long> taskLabelIds;
 
     private Integer index;
     private LocalDate createdAt;
