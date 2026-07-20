@@ -7,6 +7,7 @@ import hexlet.code.model.Label;
 import hexlet.code.repository.LabelRepository;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,8 +38,8 @@ public class LabelControllerTest {
     @Autowired
     private LabelRepository labelRepository;
 
-    @AfterEach
-    public void tearDown() {
+    @BeforeEach
+    public void setUp() {
         labelRepository.deleteAll();
     }
 

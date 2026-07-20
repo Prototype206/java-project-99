@@ -9,6 +9,7 @@ import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,8 +42,8 @@ public class UserControllerTest {
     @Autowired
     private UserRepository userRepository;
 
-    @AfterEach
-    public void tearDown() {
+    @BeforeEach
+    public void setUp() {
         userRepository.deleteAll();
     }
 
