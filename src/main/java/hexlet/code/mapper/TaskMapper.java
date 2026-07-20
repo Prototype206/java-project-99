@@ -13,25 +13,26 @@ import hexlet.code.repository.UserRepository;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(
-    uses = { JsonNullableMapper.class },
-    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-    componentModel = MappingConstants.ComponentModel.SPRING,
-    unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
+        uses = { JsonNullableMapper.class },
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+    )
 public abstract class TaskMapper {
 
     @Autowired
-    private TaskStatusRepository taskStatusRepository;
-
+    protected TaskStatusRepository taskStatusRepository;
     @Autowired
-    private UserRepository userRepository;
-
+    protected UserRepository userRepository;
     @Autowired
-    private LabelRepository labelRepository;
+    protected LabelRepository labelRepository;
+
 
     @Mapping(target = "taskStatus", source = "statusSlug", qualifiedByName = "slugToStatus")
     @Mapping(target = "assignee", source = "assigneeId", qualifiedByName = "idToUser")
@@ -63,7 +64,7 @@ public abstract class TaskMapper {
     @Named("labelIdsToLabels")
     public Set<Label> labelIdsToLabels(Set<Long> labelIds) {
         if (labelIds == null) {
-            return null;
+            return Collections.emptySet();
         }
         return labelIds.stream()
             .map(id -> labelRepository.findById(id).orElseThrow())
@@ -73,7 +74,7 @@ public abstract class TaskMapper {
     @Named("labelsToLabelIds")
     public Set<Long> labelsToLabelIds(Set<Label> labels) {
         if (labels == null) {
-            return null;
+            return Collections.emptySet();
         }
         return labels.stream()
             .map(Label::getId)
